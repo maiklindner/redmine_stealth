@@ -2,10 +2,13 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class MyControllerTest < ActionController::TestCase
   fixtures :users
+  if Redmine::VERSION::MAJOR == 3
+    fixtures :email_addresses
+  end
 
   def setup
-    @some_user = User.find(:first, :conditions => ["admin = ?", false])
-    @admin = User.find(:first, :conditions => ["admin = ?", true])
+    @some_user = User.where(:admin => false).first()
+    @admin = User.where(:admin => true).first()
   end
 
   def test_admin_can_define_stealth_permission_for_himself
@@ -18,7 +21,7 @@ class MyControllerTest < ActionController::TestCase
     @admin.reload
     assert @admin.stealth_allowed
   end
-     
+
   def test_user_can_not_define_stealth_permission
     User.stubs(:current).returns(@some_user)
 

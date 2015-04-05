@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class StealthControllerTest < ActionController::TestCase
   fixtures :users
-  if Redmine::VERSION::MAJOR == 3
+  if Redmine::VERSION::MAJOR >= 3
     fixtures :email_addresses
   end
 
@@ -17,6 +17,6 @@ class StealthControllerTest < ActionController::TestCase
   def test_toggle_enables_stealth_mode
     put :toggle
     assert_response :success
-    assert RedmineStealth::Stealth.cloaked?
+    assert RedmineStealth.cloaked?
   end
 end

@@ -13,12 +13,11 @@ module RedmineStealth
 
     module InstanceMethods
       def body_css_classes_with_stealth
-       css = body_css_classes_without_stealth || ''
-       if Stealth.cloaked?
-         css += ' stealth_on'
-       else
-         css += ' stealth_off'
-       end
+        css = body_css_classes_without_stealth || ''
+        if RedmineStealth.cloaked?
+          css += ' stealth'
+        end
+        css
       end
     end
   end

@@ -1,4 +1,2 @@
-
-body.stealth_on #top-menu { background: #000; }
-body.stealth_on #header { background: #2C4056; }
-
+body.stealth #top-menu { background: #000; }
+body.stealth #header { background: #2C4056; }

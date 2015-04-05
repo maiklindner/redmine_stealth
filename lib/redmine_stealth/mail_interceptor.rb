@@ -1,6 +1,3 @@
-
-# Rails >= 3
-
 module RedmineStealth
   class MailInterceptor
     def self.delivering_email(msg)
@@ -15,4 +12,3 @@ module RedmineStealth
 end
 
 ActionMailer::Base.register_interceptor(RedmineStealth::MailInterceptor)
-

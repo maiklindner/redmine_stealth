@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 
 class MyControllerTest < ActionController::TestCase
   fixtures :users
-  if Redmine::VERSION::MAJOR == 3
+  if Redmine::VERSION::MAJOR >= 3
     fixtures :email_addresses
   end
 

@@ -1,15 +1,17 @@
-
 module RedmineStealth
-
   include Redmine::I18n
-
-  USE_UJS = defined?(::Jquery)
 
   PREF_STEALTH_ENABLED   = :stealth_mode
 
   MESSAGE_ACTION_CLOAK   = 'enable_stealth_mode'
   MESSAGE_ACTION_DECLOAK = 'disable_stealth_mode'
   MESSAGE_TOGGLE_FAILED  = 'failed_to_toggle_stealth_mode'
+
+  class FailedMessageTranslator
+    def to_s
+      RedmineStealth.l(RedmineStealth::MESSAGE_TOGGLE_FAILED)
+    end
+  end
 
   module_function
 
@@ -18,13 +20,12 @@ module RedmineStealth
     !! (current_user && current_user.pref[PREF_STEALTH_ENABLED])
   end
 
-  def status_label(is_cloaked)
-    is_cloaked ? l(MESSAGE_ACTION_DECLOAK) : l(MESSAGE_ACTION_CLOAK)
+  def status_label
+    cloaked? ? l(MESSAGE_ACTION_DECLOAK) : l(MESSAGE_ACTION_CLOAK)
   end
 
   def toggle_stealth_mode!
-    is_cloaked = cloaked?
-    is_cloaked ? decloak! : cloak!
+    set_stealth_mode(!cloaked?)
   end
 
   def cloak!
@@ -41,16 +42,11 @@ module RedmineStealth
       user_prefs[PREF_STEALTH_ENABLED] = is_cloaked
       user_prefs.save! if user_prefs.changed?
       is_cloaked
-    else
-      logger.warn("No user to set stealth mode") if logger
     end
   end
 
-  def javascript_toggle_statement(is_cloaked)
-    label = status_label(is_cloaked)
-    method = "RedmineStealth.#{ is_cloaked ? 'cloak' : 'decloak' }"
-    "#{method}('#{label}');"
+  def javascript_toggle_statement
+    method = "RedmineStealth.#{ cloaked? ? 'cloak' : 'decloak' }"
+    "#{method}('#{status_label}');"
   end
-
 end
-
